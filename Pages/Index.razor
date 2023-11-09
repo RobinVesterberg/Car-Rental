@@ -1,0 +1,52 @@
+﻿@page "/"
+@using Car_Rental.Business.Classes
+@using Car_Rental.Common.Interfaces
+@using Car_Rental.Common.Enums
+@using Car_Rental.Common.Classes
+@using Car_Rental.Data.Classes
+@using Car_Rental.Data.Interfaces
+@inject BookingProcessor bp
+
+
+<PageTitle>Vehicles</PageTitle>
+
+<h2>Vehicles  </h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>RegNo</th>
+            <th>Make</th>
+            <th>Vehicle Type</th>
+            <th>Odometer</th>
+            <th>Cost per Km</th>
+            <th>Cost per Day</th>      
+            <th>Vehicle Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in bp.GetVehicles())
+        {
+            <tr>
+                <th>@vehicle.regNo</th>
+                <td>@vehicle.make</td>
+                <td>@vehicle.vehicleType</td>
+                <td>@vehicle.odo</td>
+                <td>@vehicle.costKm</td>
+                <td>@vehicle.costDay</td>               
+                <td>
+                    @if (vehicle.vehicleStatus == VehicleStatuses.Booked)
+                    {
+                        <button class="btn btn-danger" disabled>Booked</button>
+                    }
+                    else if (vehicle.vehicleStatus == VehicleStatuses.Available)
+                    {
+                        <button class="btn btn-success" disabled>Available</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

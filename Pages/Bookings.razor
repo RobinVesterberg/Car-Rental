@@ -1,0 +1,67 @@
+﻿@page "/bookings"
+@using Car_Rental.Business.Classes
+@using Car_Rental.Common.Interfaces
+@using Car_Rental.Common.Enums
+@using Car_Rental.Common.Classes
+@using Car_Rental.Data.Classes;
+@inject BookingProcessor bp
+@inject Car_Rental.Data.Classes.CollectionData CollectionData
+
+<PageTitle>Bookings</PageTitle>
+
+<h2>Bookings</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>RegNo</th>
+            <th>Customer Name</th>
+            <th>Km Rented</th>
+            <th>Km Returned</th>
+            <th>Rented</th>
+            <th>Returned</th>
+            <th>Total Cost</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in bp.GetBookings())
+        {
+            var vehicle = CollectionData.GetVehicles().FirstOrDefault(v => v.regNo == booking.regNo);
+            <tr>
+                <th>@booking.regNo</th>
+                <td>@booking.fullName</td>
+                <td>@booking.kmRented</td>
+                @if (booking.vehicleStatus != VehicleStatuses.Open)
+                {
+                    <td>@booking.kmReturned</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                <td>@booking.dateRented</td>
+                @if (booking.vehicleStatus != VehicleStatuses.Open)
+                {
+                    <td>@booking.dateReturned</td>
+                    <td>@bp.CalculateTotalPrice(booking, vehicle)</td>
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
+                <td>
+                    @if (booking.vehicleStatus == VehicleStatuses.Open)
+                    {
+                        <button class="btn btn-danger" disabled>Open</button>
+                    }
+                    else if (booking.vehicleStatus == VehicleStatuses.Closed)
+                    {
+                        <button class="btn btn-secondary" disabled>Closed</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

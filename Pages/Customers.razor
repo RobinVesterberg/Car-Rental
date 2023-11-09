@@ -1,0 +1,52 @@
+﻿@page "/customers"
+@using Car_Rental.Business.Classes
+@using Car_Rental.Common.Interfaces
+@using Car_Rental.Common.Enums
+@using Car_Rental.Common.Classes
+@using Car_Rental.Data.Classes;
+@inject BookingProcessor bp
+@functions 
+{
+    private List<Customer> customerList = new List<Customer>(); 
+
+    protected override void OnInitialized()
+    {
+        customerList = bp.GetCustomers().ToList();
+    }
+}
+
+<PageTitle>Customers </PageTitle>
+
+<h1>Customers</h1>
+
+@if (customerList != null)
+{
+    <div style="width: 50%;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>SSN</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customerList)
+            {
+                <tr>
+                    <th>@customer.ssn</th>
+                    <td>@customer.firstName</td>
+                    <td>@customer.lastName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+}
+
+
+
+
+
+
+
